@@ -1,0 +1,10 @@
+The project aims to build a classification model for Electroencephalogram (EEG) data, a vital tool in neuroscience and medical fields, particularly for epilepsy diagnosis. Two datasets, the CHB-MIT EEG Database, and the Bonn EEG Dataset, are employed for training and evaluating the model.
+Seizures are transient aberrations in the brain’s electrical activity. People with epilepsy, a central nervous system disorder, suffer from recurrent seizures that occur at unpredictable times and usually without warning. Seizures can result in a lapse of attention or a whole-body convulsion. Frequent seizures increase an individual’s risk of sustaining physical injuries and may even result in death.
+
+A Python script reads and explores the EEG data structure using the pyedflib library. This step helps in understanding the data's characteristics and preparing for subsequent preprocessing steps. Resampling EEG signals to a common frequency of 100,000 Hz. Extracting the maximum value of each signal and normalizing it.
+
+For EEG classification, a Long Short-Term Memory (LSTM) model is chosen. LSTMs are particularly effective in capturing temporal dependencies in sequential data, making them suitable for EEG signals. The Long Short-Term Memory (LSTM) model used in the provided Python script is a type of recurrent neural network (RNN) designed to overcome the vanishing gradient problem associated with traditional RNNs. LSTMs are well-suited for tasks involving sequential data, making them applicable to time-series analysis, natural language processing, and, in this case, EEG signal classification.
+
+The LSTM model is trained using appropriate techniques. Strategies to prevent overfitting, such as dropout and early stopping, are implemented.
+ReLU: Rectified Linear Unit is an activation function that introduces non-linearity by returning zero for negative input values and the input for positive values.
+Dropout: A regularization technique where a random fraction of input units is set to zero during training to prevent overfitting.
