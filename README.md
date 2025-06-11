@@ -1,10 +1,122 @@
-The project aims to build a classification model for Electroencephalogram (EEG) data, a vital tool in neuroscience and medical fields, particularly for epilepsy diagnosis. Two datasets, the CHB-MIT EEG Database, and the Bonn EEG Dataset, are employed for training and evaluating the model.
-Seizures are transient aberrations in the brain’s electrical activity. People with epilepsy, a central nervous system disorder, suffer from recurrent seizures that occur at unpredictable times and usually without warning. Seizures can result in a lapse of attention or a whole-body convulsion. Frequent seizures increase an individual’s risk of sustaining physical injuries and may even result in death.
+# EEG Classification using LSTM
 
-A Python script reads and explores the EEG data structure using the pyedflib library. This step helps in understanding the data's characteristics and preparing for subsequent preprocessing steps. Resampling EEG signals to a common frequency of 100,000 Hz. Extracting the maximum value of each signal and normalizing it.
+## Table of Contents
 
-For EEG classification, a Long Short-Term Memory (LSTM) model is chosen. LSTMs are particularly effective in capturing temporal dependencies in sequential data, making them suitable for EEG signals. The Long Short-Term Memory (LSTM) model used in the provided Python script is a type of recurrent neural network (RNN) designed to overcome the vanishing gradient problem associated with traditional RNNs. LSTMs are well-suited for tasks involving sequential data, making them applicable to time-series analysis, natural language processing, and, in this case, EEG signal classification.
+* [Project Overview](#project-overview)
+* [Features](#features)
+* [Repository Structure](#repository-structure)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Datasets](#datasets)
+* [Preprocessing](#preprocessing)
+* [Model Architecture](#model-architecture)
+* [Training](#training)
+* [Evaluation](#evaluation)
+* [Limitations](#limitations)
+* [Future Work](#future-work)
+* [Contributing](#contributing)
 
-The LSTM model is trained using appropriate techniques. Strategies to prevent overfitting, such as dropout and early stopping, are implemented.
-ReLU: Rectified Linear Unit is an activation function that introduces non-linearity by returning zero for negative input values and the input for positive values.
-Dropout: A regularization technique where a random fraction of input units is set to zero during training to prevent overfitting.
+---
+
+## Project Overview
+
+This repository contains code and documentation for building a patient-specific EEG seizure classifier. We leverage two public EEG datasets (CHB-MIT and Bonn EEG) to train a Long Short-Term Memory (LSTM) neural network that discriminates between seizure and non-seizure EEG segments in a supervised framework.
+
+## Features
+
+* **Data Preprocessing:** Automatic reading of EDF files, resampling to a common frequency, and normalization.
+* **Feature Extraction:** Construction of time-domain feature vectors capturing spectral and spatial EEG characteristics.
+* **Deep Learning Model:** A 2-layer LSTM network with dropout and fully connected layers for binary classification.
+* **Evaluation Metrics:** Accuracy, precision, recall, F1-score via scikit-learn’s classification report.
+* **Modular Code:** Implemented as a Jupyter notebook with clear sections for each pipeline step.
+
+## Repository Structure
+
+```
+├── data/                            # Raw EDF datasets (not tracked)
+│   ├── chb-mit-scalp-eeg-database-1.0.0/
+│   └── bonn-eeg-dataset/
+├── converted_artifacts/             # NumPy arrays of preprocessed signals
+├── notebooks/                       # Experimental and preprocessing notebooks
+│   └── FDA_Project_3_Group_10.ipynb
+├── README.md                        # Project documentation (this file)
+└── requirements.txt                 # Python dependencies
+```
+
+## Requirements
+
+* Python 3.7+
+* PyTorch
+* NumPy
+* Pandas
+* SciPy
+* pyEDFlib
+* scikit-learn
+* tqdm
+
+Install with:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Datasets
+
+1. **CHB-MIT EEG Database**: Download from [PhysioNet](https://physionet.org/content/chbmit/1.0.0/).
+2. **Bonn EEG Dataset**: Download from the University of Bonn website.
+
+Place the extracted directories under `data/` as shown in the repository structure.
+
+## Preprocessing
+
+All preprocessing steps are in the notebook:
+
+1. **EDF Reading:** Uses `pyedflib.highlevel.read_edf` to load raw signals.
+2. **Resampling:** Uniform sampling at 100,000 Hz via `scipy.signal.resample`.
+3. **Segmentation & Labeling:** Convert continuous recordings into labeled segments and save as `.npy` in `converted_artifacts/`.
+
+Run:
+
+```bash
+jupyter notebook notebooks/FDA_Project_3_Group_10.ipynb
+```
+
+## Model Architecture
+
+* **LSTM Layers:** 2 layers, input size = 10,000 (samples per segment), hidden size = 100, `batch_first=True`.
+* **Dropout:** 20% between LSTM and dense layers.
+* **Dense Layers:** Linear(100 → 32) + ReLU → Linear(32 → 2) + Softmax.
+
+## Training
+
+Training parameters:
+
+* **Loss:** Cross-Entropy Loss
+* **Optimizer:** Adam (lr=3e-4)
+* **Batch Size:** 4
+* **Epochs:** 10
+
+In the notebook, sections titled **Model Training** cover the full epoch loop and progress bars.
+
+## Evaluation
+
+* Split: 500 training samples / 186 test samples (patient-specific split).
+* Metrics: Overall accuracy and class-wise precision, recall, F1-score printed at the end of training.
+
+
+## Limitations
+
+* **Dataset Size & Diversity:** Only two datasets; may not generalize across all patient populations.
+* **Hardware Requirements:** GPU recommended for faster training on large EEG segments.
+* **Interpretability:** LSTM black-box model; clinical applications may require explainable frameworks.
+
+## Future Work
+
+* Experiment with hybrid CNN–LSTM architectures.
+* Apply data augmentation (time warping, noise injection).
+* Develop real-time inference pipeline for seizure alert systems.
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests for bug fixes and enhancements.
+
